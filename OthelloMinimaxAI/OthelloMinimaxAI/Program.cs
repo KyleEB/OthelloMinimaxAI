@@ -10,7 +10,23 @@ namespace OthelloMinimaxAI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Test Write");
+            bool shouldExit = false;
+            
+            Console.WriteLine("Let's play Othello!");
+
+            Board currentBoard = new Board();
+            Console.Write(currentBoard.ToString());
+
+            while (!shouldExit)
+            {
+                
+                if (Console.ReadKey().Key.Equals(ConsoleKey.Escape))
+                {
+                    shouldExit = true;
+                }
+            }
+
         }
+
     }
 }
