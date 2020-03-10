@@ -17,6 +17,10 @@ namespace OthelloMinimaxAI
             Board currentBoard = new Board();
             Console.Write(currentBoard.ToString());
 
+            Console.WriteLine(currentBoard.makeMove(3, 2, PIECE.BLACK));
+
+            Console.WriteLine(currentBoard.makeMove(3, 2, PIECE.WHITE));
+
             while (!shouldExit)
             {
                 
