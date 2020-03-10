@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 
 namespace OthelloMinimaxAI
 {
@@ -10,7 +7,7 @@ namespace OthelloMinimaxAI
     {
         public int row;
         public int col;
-        public PIECE who;
+        public Board.PIECE who;
 
         public HashSet<(int row, int col)> flanked;
 
@@ -18,11 +15,11 @@ namespace OthelloMinimaxAI
        {
             row = -1;
             col = -1;
-            who = PIECE.EMPTY;
+            who = Board.PIECE.EMPTY;
             flanked = new HashSet<(int,int)>();
        } 
 
-       public Move( int row, int col, PIECE who)
+       public Move( int row, int col, Board.PIECE who)
        {
             this.row = row;
             this.col = col;

@@ -12,15 +12,15 @@ namespace OthelloMinimaxAI
 
             string player = Console.ReadLine();
 
-            PIECE PlayerPiece;
+            Board.PIECE PlayerPiece;
 
             if(player.ToUpper().Equals("B"))
             {
-                PlayerPiece = PIECE.BLACK;
+                PlayerPiece = Board.PIECE.BLACK;
             }
             else
             {
-                PlayerPiece = PIECE.WHITE;
+                PlayerPiece = Board.PIECE.WHITE;
             }
 
             Board currentBoard = new Board(PlayerPiece);
@@ -30,13 +30,15 @@ namespace OthelloMinimaxAI
             while (!shouldExit)
             {
                 Console.Write(currentBoard.ToString());
-                Console.WriteLine("Enter row: \n");
-                int row = int.Parse(Console.ReadLine().Trim());
-                Console.WriteLine("\n");
+                Console.WriteLine(currentBoard.currentPlayer + " | Make your move!");
 
-                Console.WriteLine("Enter col: \n");
+                Console.WriteLine("Enter row: ");
+                int row = int.Parse(Console.ReadLine().Trim());
+                
+
+                Console.WriteLine("Enter col: ");
                 int col =int.Parse(Console.ReadLine().Trim());
-                Console.WriteLine("\n");
+                
 
                 if (!currentBoard.makeMove(row, col)) 
                 {

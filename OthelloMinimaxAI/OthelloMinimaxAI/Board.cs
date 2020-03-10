@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace OthelloMinimaxAI
 {
-    enum PIECE { BLACK, WHITE, EMPTY };
+   
     class Board
     {
         private int SIZE = 8;
 
+        public enum  PIECE { BLACK, WHITE, EMPTY };
+
         private PIECE[,] theBoard;
 
-        private PIECE currentPlayer;
+        public PIECE currentPlayer;
 
         private PIECE humanPlayer;
 
@@ -76,7 +76,6 @@ namespace OthelloMinimaxAI
             {
                 return false;
             }
-            
         }
 
         private void flipFlanked(int row, int col, PIECE who)
