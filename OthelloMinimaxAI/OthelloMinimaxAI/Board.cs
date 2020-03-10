@@ -64,7 +64,6 @@ namespace OthelloMinimaxAI
 
         public bool makeMove(int row, int col)
         {
-
             if (isValidMove(row, col, currentPlayer))
             {
                 flipFlanked(row, col, currentPlayer);
@@ -93,20 +92,17 @@ namespace OthelloMinimaxAI
         {
             //check all the directions for a same piece
             Move tempMove = new Move();
-            if (theBoard[row, col] == PIECE.EMPTY
-           &&
-           (checkDirection(row, col, -1, 0, who, tempMove) //up
-           || checkDirection(row, col, 1, 0, who, tempMove) //down
-           || checkDirection(row, col, 0, -1, who, tempMove) //left
-           || checkDirection(row, col, 0, 1, who, tempMove) //right
-           || checkDirection(row, col, -1, 1, who, tempMove) //up-right
-           || checkDirection(row, col, 1, 1, who, tempMove) //down-right
-           || checkDirection(row, col, -1, -1, who, tempMove) //up-left
-           || checkDirection(row, col, 1, -1, who, tempMove))) //down-left
-            {
-                return tempMove.flanked.ToArray<(int,int)>();
-            }
-            return null;
+
+            checkDirection(row, col, -1, 0, who, tempMove); //up
+            checkDirection(row, col, 1, 0, who, tempMove); //down
+            checkDirection(row, col, 0, -1, who, tempMove); //left
+            checkDirection(row, col, 0, 1, who, tempMove); //right
+            checkDirection(row, col, -1, 1, who, tempMove); //up-right
+            checkDirection(row, col, 1, 1, who, tempMove); //down-right
+            checkDirection(row, col, -1, -1, who, tempMove); //up-left
+            checkDirection(row, col, 1, -1, who, tempMove); //down-left
+            
+            return tempMove.flanked.ToArray<(int,int)>();
         }
 
         private bool isValidMove(int row, int col, PIECE who)
@@ -125,29 +121,31 @@ namespace OthelloMinimaxAI
                 {
                     //check all the directions for a same piece
                     Move tempMove = new Move();
-                    if (theBoard[i,j] == PIECE.EMPTY 
-                   && 
-                   (checkDirection(i, j, -1, 0, who, tempMove) //up
-                   || checkDirection(i, j, 1, 0, who, tempMove) //down
-                   || checkDirection(i, j, 0, -1, who, tempMove) //left
-                   || checkDirection(i, j, 0, 1, who, tempMove) //right
-                   || checkDirection(i, j, -1, 1, who, tempMove) //up-right
-                   || checkDirection(i, j, 1, 1, who, tempMove) //down-right
-                   || checkDirection(i, j, -1, -1, who, tempMove) //up-left
-                   || checkDirection(i, j, 1, -1, who, tempMove))) //down-left
-                    {
+                    if (theBoard[i, j] == PIECE.EMPTY) { 
+
+                        checkDirection(i, j, -1, 0, who, tempMove); //up
+                        checkDirection(i, j, 1, 0, who, tempMove); //down
+                        checkDirection(i, j, 0, -1, who, tempMove); //left
+                        checkDirection(i, j, 0, 1, who, tempMove); //right
+                        checkDirection(i, j, -1, 1, who, tempMove); //up-right
+                        checkDirection(i, j, 1, 1, who, tempMove); //down-right
+                        checkDirection(i, j, -1, -1, who, tempMove); //up-left
+                        checkDirection(i, j, 1, -1, who, tempMove); //down-left
+                    
                         tempMove.who = who;
                         tempMove.row = i;
                         tempMove.col = j;
-                        possibleMoves.Add(tempMove);
-                        //Console.WriteLine(tempMove.ToString());
+                        if (tempMove.flanked.Count() > 0)
+                        {
+                            possibleMoves.Add(tempMove);
+                        }
                     }
                 }
             }
             return possibleMoves;
         }
 
-        private bool checkDirection(int row, int col, int rowChange, int colChange, PIECE who, Move currentMove)
+        private void checkDirection(int row, int col, int rowChange, int colChange, PIECE who, Move currentMove)
         {
             row += rowChange;
             col += colChange;
@@ -159,7 +157,7 @@ namespace OthelloMinimaxAI
                 {
                     foreach((int,int) i  in tempToFlip)
                     currentMove.flanked.Add(i);
-                    return true;
+                    return;
                 }
                 else if (theBoard[row, col] == GetOppositePiece(who))
                 {
@@ -170,10 +168,10 @@ namespace OthelloMinimaxAI
                 }
                 else 
                 {
-                    return false;
+                    return;
                 }
             }
-            return false;
+            return;
         }
 
         private bool inBounds(int row, int col)
