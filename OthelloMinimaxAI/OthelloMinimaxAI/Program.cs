@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OthelloMinimaxAI
 {
@@ -12,22 +8,41 @@ namespace OthelloMinimaxAI
         {
             bool shouldExit = false;
             
-            Console.WriteLine("Let's play Othello!");
+            Console.WriteLine("Let's play Othello! \n Please Enter 'B' or 'W' for preferred piece");
 
-            Board currentBoard = new Board();
-            Console.Write(currentBoard.ToString());
+            string player = Console.ReadLine();
 
-            Console.WriteLine(currentBoard.makeMove(3, 2, PIECE.BLACK));
+            PIECE PlayerPiece;
 
-            Console.WriteLine(currentBoard.makeMove(3, 2, PIECE.WHITE));
+            if(player.ToUpper().Equals("B"))
+            {
+                PlayerPiece = PIECE.BLACK;
+            }
+            else
+            {
+                PlayerPiece = PIECE.WHITE;
+            }
+
+            Board currentBoard = new Board(PlayerPiece);
+            
+
 
             while (!shouldExit)
             {
-                
-                if (Console.ReadKey().Key.Equals(ConsoleKey.Escape))
+                Console.Write(currentBoard.ToString());
+                Console.WriteLine("Enter row: \n");
+                int row = int.Parse(Console.ReadLine().Trim());
+                Console.WriteLine("\n");
+
+                Console.WriteLine("Enter col: \n");
+                int col =int.Parse(Console.ReadLine().Trim());
+                Console.WriteLine("\n");
+
+                if (!currentBoard.makeMove(row, col)) 
                 {
-                    shouldExit = true;
+                    Console.WriteLine("Invalid Move \n");
                 }
+
             }
 
         }

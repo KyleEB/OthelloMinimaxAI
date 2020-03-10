@@ -9,11 +9,13 @@ namespace OthelloMinimaxAI
     enum PIECE { BLACK, WHITE, EMPTY };
     class Board
     {
-        private (int rows, int cols) dimensions = (8, 8);
+        private int SIZE = 8;
 
         private PIECE[,] theBoard;
 
         private PIECE currentPlayer;
+
+        private PIECE humanPlayer;
 
         private int totalTurns;
 
@@ -33,9 +35,10 @@ namespace OthelloMinimaxAI
             return count;
         }
 
-        public Board()
+        public Board(PIECE playerInput)
         {
-            theBoard = new PIECE[dimensions.rows, dimensions.cols];
+            theBoard = new PIECE[SIZE, SIZE];
+            humanPlayer = playerInput;
             currentPlayer = PIECE.BLACK;
             totalTurns = 0;
             makeStartingBoard();
@@ -59,11 +62,15 @@ namespace OthelloMinimaxAI
         }
 
 
-        public bool makeMove(int row, int col, PIECE who)
+        public bool makeMove(int row, int col)
         {
-            if (isValidMove(row, col, who))
+
+            if (isValidMove(row, col, currentPlayer))
             {
-                flipFlanked(row, col, who);
+                flipFlanked(row, col, currentPlayer);
+                theBoard[row, col] = currentPlayer;
+                currentPlayer = Board.GetOppositePiece(currentPlayer);
+                totalTurns++;
                 return true;
             }
             else
@@ -75,12 +82,31 @@ namespace OthelloMinimaxAI
 
         private void flipFlanked(int row, int col, PIECE who)
         {
-            //throw new NotImplementedException();
+           (int,int) [] toFlip = getPiecesToFlip(row, col, who);
+            foreach((int row,int col) point in toFlip)
+            {
+                theBoard[point.row, point.col] = currentPlayer;
+            }
         }
 
-        private void flipDirection(int row, int col, int rowChange, int colChange, PIECE who)
+        private (int, int) [] getPiecesToFlip(int row, int col, PIECE who)
         {
-
+            //check all the directions for a same piece
+            Move tempMove = new Move();
+            if (theBoard[row, col] == PIECE.EMPTY
+           &&
+           (checkDirection(row, col, -1, 0, who, tempMove) //up
+           || checkDirection(row, col, 1, 0, who, tempMove) //down
+           || checkDirection(row, col, 0, -1, who, tempMove) //left
+           || checkDirection(row, col, 0, 1, who, tempMove) //right
+           || checkDirection(row, col, -1, 1, who, tempMove) //up-right
+           || checkDirection(row, col, 1, 1, who, tempMove) //down-right
+           || checkDirection(row, col, -1, -1, who, tempMove) //up-left
+           || checkDirection(row, col, 1, -1, who, tempMove))) //down-left
+            {
+                return tempMove.flanked.ToArray<(int,int)>();
+            }
+            return null;
         }
 
         private bool isValidMove(int row, int col, PIECE who)
@@ -114,7 +140,7 @@ namespace OthelloMinimaxAI
                         tempMove.row = i;
                         tempMove.col = j;
                         possibleMoves.Add(tempMove);
-                        Console.WriteLine(tempMove.ToString());
+                        //Console.WriteLine(tempMove.ToString());
                     }
                 }
             }
@@ -137,10 +163,10 @@ namespace OthelloMinimaxAI
                 }
                 else if (theBoard[row, col] == GetOppositePiece(who))
                 {
+                    tempToFlip.Add((row, col));
                     row += rowChange;
                     col += colChange;
                     distance++;
-                    tempToFlip.Add((row, col));
                 }
                 else 
                 {
