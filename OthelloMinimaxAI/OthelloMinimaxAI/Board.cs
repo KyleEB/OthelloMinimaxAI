@@ -44,6 +44,14 @@ namespace OthelloMinimaxAI
             makeStartingBoard();
         }
 
+        public Board(Board toCopy)
+        {
+            theBoard = toCopy.theBoard;
+            currentPlayer = toCopy.currentPlayer;
+            humanPlayer = toCopy.humanPlayer;
+            totalTurns = toCopy.totalTurns;
+        }
+
 
         private void makeStartingBoard()
         {
