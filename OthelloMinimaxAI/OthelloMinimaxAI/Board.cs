@@ -69,7 +69,7 @@ namespace OthelloMinimaxAI
         }
 
 
-        public (int bestScore, Move bestMove) minimax(Board currentBoard, PIECE player, int maxDepth, int currentDepth)
+        public (int bestScore, Move bestMove) minimax(Board currentBoard, PIECE player, int maxDepth, int currentDepth, int alpha, int beta)
         {
             int bestScore;
             Move bestMove = null; 
@@ -95,7 +95,7 @@ namespace OthelloMinimaxAI
 
                 newBoard.makeMove(move.row, move.col);
 
-                (int currentScore, Move currentMove) = minimax(newBoard, player, maxDepth, currentDepth + 1);
+                (int currentScore, Move currentMove) = minimax(newBoard, player, maxDepth, currentDepth + 1, alpha, beta);
 
                 if(currentBoard.currentPlayer == player)
                 {
@@ -103,6 +103,11 @@ namespace OthelloMinimaxAI
                     {
                         bestScore = currentScore;
                         bestMove = move;
+                        alpha = Math.Max(alpha, bestScore);
+                        if(beta <= alpha)
+                        {
+                            break;
+                        }
                     }
                 }
                 else 
@@ -111,6 +116,11 @@ namespace OthelloMinimaxAI
                     {
                         bestScore = currentScore;
                         bestMove = move;
+                        beta = Math.Max(beta, bestScore);
+                        if (beta <= alpha)
+                        {
+                            break;
+                        }
                     }
                 }
             }

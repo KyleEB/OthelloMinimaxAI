@@ -54,21 +54,31 @@ namespace OthelloMinimaxAI
 
                 if (currentBoard.currentPlayer == PlayerPiece)
                 {
-                    Console.WriteLine("Enter row: ");
-                    int row = int.Parse(Console.ReadLine().Trim());
+                    //Console.WriteLine("Enter row: ");
+                    //int row = int.Parse(Console.ReadLine().Trim());
 
-                    Console.WriteLine("Enter col: ");
-                    int col = int.Parse(Console.ReadLine().Trim());
+                    //Console.WriteLine("Enter col: ");
+                    //int col = int.Parse(Console.ReadLine().Trim());
 
-                    if (!currentBoard.makeMove(row, col))
+                    //if (!currentBoard.makeMove(row, col))
+                    //{
+                    //    Console.WriteLine("Invalid Move \n");
+                    //    continue;
+                    //}
+                    (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.BLACK, minimaxDepth, 0, int.MinValue, int.MaxValue);
+
+                    if (move == null)
                     {
-                        Console.WriteLine("Invalid Move \n");
+                        currentBoard.terminal = true;
                         continue;
                     }
+                    currentBoard.makeMove(move.row, move.col);
+                    Console.WriteLine("AI placed a piece at " + "row: " + move.row + "col: " + move.col + "\n");
+
                 }
                 else if (currentBoard.currentPlayer != PlayerPiece)
                 {
-                    (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.WHITE, minimaxDepth, 0);
+                    (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.WHITE, minimaxDepth, 0, int.MinValue, int.MaxValue);
 
                     if (move == null)
                     {
