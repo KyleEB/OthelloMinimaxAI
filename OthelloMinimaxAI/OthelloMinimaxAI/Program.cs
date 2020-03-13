@@ -24,26 +24,54 @@ namespace OthelloMinimaxAI
             }
 
             Board currentBoard = new Board(PlayerPiece);
+
+            (int test, Move testMove) = currentBoard.minimax(currentBoard, PlayerPiece, 5, 0);
             
 
 
             while (!shouldExit)
             {
+                if (currentBoard.terminal)
+                {
+                    if(currentBoard.getNumBlackPieces() > currentBoard.getNumWhitePieces())
+                    {
+                        Console.WriteLine("Black Wins!");
+                    }
+                    else 
+                    {
+                        Console.WriteLine("White Wins!");
+                    }
+                    break;
+                }
+
                 Console.Write(currentBoard.ToString());
                 Console.WriteLine(currentBoard.currentPlayer + " | Make your move!");
 
-                Console.WriteLine("Enter row: ");
-                int row = int.Parse(Console.ReadLine().Trim());
-                
-
-                Console.WriteLine("Enter col: ");
-                int col =int.Parse(Console.ReadLine().Trim());
-                
-
-                if (!currentBoard.makeMove(row, col)) 
+                if (currentBoard.currentPlayer == PlayerPiece)
                 {
-                    Console.WriteLine("Invalid Move \n");
+                    Console.WriteLine("Enter row: ");
+                    int row = int.Parse(Console.ReadLine().Trim());
+
+
+                    Console.WriteLine("Enter col: ");
+                    int col = int.Parse(Console.ReadLine().Trim());
+
+                    if (!currentBoard.makeMove(row, col))
+                    {
+                        Console.WriteLine("Invalid Move \n");
+
+                        continue;
+                    }
                 }
+                else if(currentBoard.currentPlayer != PlayerPiece)
+                {
+                    (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.WHITE, 4, 0);
+                    currentBoard.makeMove(move.row, move.col);
+
+                    Console.WriteLine("AI placed a piece at " + "row: " + move.row + "col: " + move.col + "\n");
+                }
+
+                
 
             }
 

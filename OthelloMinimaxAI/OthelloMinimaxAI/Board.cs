@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -15,9 +16,11 @@ namespace OthelloMinimaxAI
 
         public PIECE currentPlayer;
 
-        private PIECE humanPlayer;
+        public PIECE humanPlayer;
 
         private int totalTurns;
+
+        public bool terminal;
 
         public int getNumBlackPieces() => getNumPieces(PIECE.BLACK);
         public int getNumWhitePieces() => getNumPieces(PIECE.WHITE);
@@ -46,12 +49,80 @@ namespace OthelloMinimaxAI
 
         public Board(Board toCopy)
         {
-            theBoard = toCopy.theBoard;
+            theBoard = (PIECE [,]) toCopy.theBoard.Clone();
             currentPlayer = toCopy.currentPlayer;
             humanPlayer = toCopy.humanPlayer;
             totalTurns = toCopy.totalTurns;
         }
 
+        private bool isGameOver()
+        {
+            if (getValidMoves(PIECE.BLACK).Count == 0 || getValidMoves(PIECE.WHITE).Count == 0)
+            {
+                terminal = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public (int bestScore, Move bestMove) minimax(Board currentBoard, PIECE player, int maxDepth, int currentDepth)
+        {
+            int bestScore;
+            Move bestMove = null; 
+
+            if(currentBoard.isGameOver() || currentDepth == maxDepth)
+            {
+                return (currentBoard.evaluate(player), null);
+            }
+
+            if(currentBoard.currentPlayer == player)
+            {
+                bestScore = int.MinValue;
+            }
+            else 
+            {
+                bestScore = int.MaxValue;
+            }
+
+            var MoveSet = currentBoard.getValidMoves(currentPlayer);
+            foreach(Move move in MoveSet)
+            {
+                Board newBoard = new Board(currentBoard);
+
+                newBoard.makeMove(move.row, move.col);
+
+                (int currentScore, Move currentMove) = minimax(newBoard, player, maxDepth, currentDepth + 1);
+
+                if(currentBoard.currentPlayer == player)
+                {
+                    if(currentScore > bestScore)
+                    {
+                        bestScore = currentScore;
+                        bestMove = move;
+                    }
+                }
+                else 
+                {
+                    if(currentScore < bestScore)
+                    {
+                        bestScore = currentScore;
+                        bestMove = move;
+                    }
+                }
+            }
+
+            return (bestScore, bestMove);
+
+        }
+
+        private int evaluate(PIECE player)
+        {
+            return getNumPieces(player) - getNumPieces(GetOppositePiece(player));
+        }
 
         private void makeStartingBoard()
         {
