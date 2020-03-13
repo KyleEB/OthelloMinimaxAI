@@ -6,7 +6,6 @@ namespace OthelloMinimaxAI
     {
         static void Main(string[] args)
         {
-            bool shouldExit = false;
             
             Console.WriteLine("Let's play Othello! \n Please Enter 'B' or 'W' for preferred piece");
 
@@ -23,13 +22,17 @@ namespace OthelloMinimaxAI
                 PlayerPiece = Board.PIECE.WHITE;
             }
 
+            Console.WriteLine("Choose your difficulty 1-10");
+
+            int minimaxDepth = int.Parse(Console.ReadLine());
+
             Board currentBoard = new Board(PlayerPiece);
 
             (int test, Move testMove) = currentBoard.minimax(currentBoard, PlayerPiece, 5, 0);
             
 
 
-            while (!shouldExit)
+            while (true)
             {
                 if (currentBoard.terminal)
                 {
@@ -41,7 +44,11 @@ namespace OthelloMinimaxAI
                     {
                         Console.WriteLine("White Wins!");
                     }
-                    break;
+
+                    while (true)
+                    {
+
+                    }
                 }
 
                 Console.Write(currentBoard.ToString());
@@ -52,23 +59,27 @@ namespace OthelloMinimaxAI
                     Console.WriteLine("Enter row: ");
                     int row = int.Parse(Console.ReadLine().Trim());
 
-
                     Console.WriteLine("Enter col: ");
                     int col = int.Parse(Console.ReadLine().Trim());
 
                     if (!currentBoard.makeMove(row, col))
                     {
                         Console.WriteLine("Invalid Move \n");
-
                         continue;
                     }
                 }
-                else if(currentBoard.currentPlayer != PlayerPiece)
+                else if (currentBoard.currentPlayer != PlayerPiece)
                 {
-                    (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.WHITE, 4, 0);
-                    currentBoard.makeMove(move.row, move.col);
+                    (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.WHITE, minimaxDepth, 0);
 
+                    if (move == null)
+                    {
+                        currentBoard.terminal = true;
+                        continue;
+                    }
+                    currentBoard.makeMove(move.row, move.col);
                     Console.WriteLine("AI placed a piece at " + "row: " + move.row + "col: " + move.col + "\n");
+                    
                 }
 
                 
