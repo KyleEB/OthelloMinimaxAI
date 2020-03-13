@@ -22,15 +22,13 @@ namespace OthelloMinimaxAI
                 PlayerPiece = Board.PIECE.WHITE;
             }
 
+            Board currentBoard = new Board(PlayerPiece);
+
             Console.WriteLine("Choose your difficulty 1-10");
 
             int minimaxDepth = int.Parse(Console.ReadLine());
 
-            Board currentBoard = new Board(PlayerPiece);
-
-            (int test, Move testMove) = currentBoard.minimax(currentBoard, PlayerPiece, 5, 0);
-            
-
+            Console.WriteLine("Row and Column numbers are 0-7 instead of 1-8");
 
             while (true)
             {
