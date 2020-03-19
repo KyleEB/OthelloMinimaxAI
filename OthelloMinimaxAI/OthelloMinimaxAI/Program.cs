@@ -2,18 +2,17 @@
 
 namespace OthelloMinimaxAI
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            
             Console.WriteLine("Let's play Othello! \n Please Enter 'B' or 'W' for preferred piece");
 
             string player = Console.ReadLine();
 
             Board.PIECE PlayerPiece;
 
-            if(player.ToUpper().Equals("B"))
+            if (player.ToUpper().Equals("B"))
             {
                 PlayerPiece = Board.PIECE.BLACK;
             }
@@ -32,27 +31,26 @@ namespace OthelloMinimaxAI
 
             while (true)
             {
-                if (currentBoard.terminal)
+                if (currentBoard.IsTerminal)
                 {
-                    if(currentBoard.getNumBlackPieces() > currentBoard.getNumWhitePieces())
+                    if (currentBoard.GetNumBlackPieces() > currentBoard.GetNumWhitePieces())
                     {
                         Console.WriteLine("Black Wins!");
                     }
-                    else 
+                    else
                     {
                         Console.WriteLine("White Wins!");
                     }
 
                     while (true)
                     {
-
                     }
                 }
 
                 Console.Write(currentBoard.ToString());
-                Console.WriteLine(currentBoard.currentPlayer + " | Make your move!");
+                Console.WriteLine(currentBoard.CurrentPlayer + " | Make your move!");
 
-                if (currentBoard.currentPlayer == PlayerPiece)
+                if (currentBoard.CurrentPlayer == PlayerPiece)
                 {
                     //Console.WriteLine("Enter row: ");
                     //int row = int.Parse(Console.ReadLine().Trim());
@@ -69,32 +67,25 @@ namespace OthelloMinimaxAI
 
                     if (move == null)
                     {
-                        currentBoard.terminal = true;
+                        currentBoard.IsTerminal = true;
                         continue;
                     }
                     currentBoard.makeMove(move.row, move.col);
                     Console.WriteLine("AI placed a piece at " + "row: " + move.row + "col: " + move.col + "\n");
-
                 }
-                else if (currentBoard.currentPlayer != PlayerPiece)
+                else if (currentBoard.CurrentPlayer != PlayerPiece)
                 {
                     (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.WHITE, minimaxDepth, 0, int.MinValue, int.MaxValue);
 
                     if (move == null)
                     {
-                        currentBoard.terminal = true;
+                        currentBoard.IsTerminal = true;
                         continue;
                     }
                     currentBoard.makeMove(move.row, move.col);
                     Console.WriteLine("AI placed a piece at " + "row: " + move.row + "col: " + move.col + "\n");
-                    
                 }
-
-                
-
             }
-
         }
-
     }
 }
