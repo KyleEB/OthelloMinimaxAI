@@ -11,13 +11,13 @@ namespace OthelloMinimaxAI
         public bool IsTerminal;
         private int SIZE = 8;
 
-        private PIECE[,] TheBoard;
+        private PIECE[,] theBoard;
 
         private int totalTurns;
 
         public Board(PIECE playerInput)
         {
-            TheBoard = new PIECE[SIZE, SIZE];
+            theBoard = new PIECE[SIZE, SIZE];
             HumanPlayer = playerInput;
             CurrentPlayer = PIECE.BLACK;
             totalTurns = 0;
@@ -26,7 +26,7 @@ namespace OthelloMinimaxAI
 
         public Board(Board toCopy)
         {
-            TheBoard = (PIECE[,])toCopy.TheBoard.Clone();
+            theBoard = (PIECE[,])toCopy.theBoard.Clone();
             CurrentPlayer = toCopy.CurrentPlayer;
             HumanPlayer = toCopy.HumanPlayer;
             totalTurns = toCopy.totalTurns;
@@ -49,7 +49,7 @@ namespace OthelloMinimaxAI
             if (isValidMove(row, col, CurrentPlayer))
             {
                 flipFlanked(row, col, CurrentPlayer);
-                TheBoard[row, col] = CurrentPlayer;
+                theBoard[row, col] = CurrentPlayer;
                 CurrentPlayer = Board.GetOppositePiece(CurrentPlayer);
                 totalTurns++;
                 return true;
@@ -65,7 +65,7 @@ namespace OthelloMinimaxAI
             int bestScore;
             Move bestMove = null;
 
-            if (currentBoard.isGameOver() || currentDepth == maxDepth)
+            if (currentBoard.IsGameOver() || currentDepth == maxDepth)
             {
                 return (currentBoard.evaluate(player), null);
             }
@@ -127,12 +127,12 @@ namespace OthelloMinimaxAI
             output += "\n #Black: " + GetNumBlackPieces();
             output += ", #White: " + GetNumWhitePieces();
             output += "\n  0 1 2 3 4 5 6 7 \n";
-            for (int i = 0; i < TheBoard.GetLength(0); i++)
+            for (int i = 0; i < theBoard.GetLength(0); i++)
             {
                 output += i + " ";
-                for (int j = 0; j < TheBoard.GetLength(1); j++)
+                for (int j = 0; j < theBoard.GetLength(1); j++)
                 {
-                    output += pieceToString(TheBoard[i, j]) + " ";
+                    output += pieceToString(theBoard[i, j]) + " ";
                 }
 
                 output += "\n";
@@ -149,13 +149,13 @@ namespace OthelloMinimaxAI
             HashSet<(int row, int col)> tempToFlip = new HashSet<(int row, int col)>();
             while (inBounds(row, col))
             {
-                if (distance > 1 && TheBoard[row, col] == who)
+                if (distance > 1 && theBoard[row, col] == who)
                 {
                     foreach ((int, int) i in tempToFlip)
                         currentMove.flanked.Add(i);
                     return;
                 }
-                else if (TheBoard[row, col] == GetOppositePiece(who))
+                else if (theBoard[row, col] == GetOppositePiece(who))
                 {
                     tempToFlip.Add((row, col));
                     row += rowChange;
@@ -180,14 +180,14 @@ namespace OthelloMinimaxAI
             (int, int)[] toFlip = getPiecesToFlip(row, col, who);
             foreach ((int row, int col) point in toFlip)
             {
-                TheBoard[point.row, point.col] = CurrentPlayer;
+                theBoard[point.row, point.col] = CurrentPlayer;
             }
         }
 
         private int GetNumPieces(PIECE kind)
         {
             int count = 0;
-            foreach (PIECE p in TheBoard)
+            foreach (PIECE p in theBoard)
             {
                 if (p == kind)
                 {
@@ -216,13 +216,13 @@ namespace OthelloMinimaxAI
         private HashSet<Move> getValidMoves(PIECE who)
         {
             HashSet<Move> possibleMoves = new HashSet<Move>();
-            for (int i = 0; i < TheBoard.GetLength(0); i++)
+            for (int i = 0; i < theBoard.GetLength(0); i++)
             {
-                for (int j = 0; j < TheBoard.GetLength(1); j++)
+                for (int j = 0; j < theBoard.GetLength(1); j++)
                 {
                     //check all the directions for a same piece
                     Move tempMove = new Move();
-                    if (TheBoard[i, j] == PIECE.EMPTY)
+                    if (theBoard[i, j] == PIECE.EMPTY)
                     {
                         checkDirection(i, j, -1, 0, who, tempMove); //up
                         checkDirection(i, j, 1, 0, who, tempMove); //down
@@ -248,10 +248,10 @@ namespace OthelloMinimaxAI
 
         private bool inBounds(int row, int col)
         {
-            return (row >= 0 && row < TheBoard.GetLength(0) && col >= 0 && col < TheBoard.GetLength(1));
+            return (row >= 0 && row < theBoard.GetLength(0) && col >= 0 && col < theBoard.GetLength(1));
         }
 
-        private bool isGameOver()
+        private bool IsGameOver()
         {
             if (getValidMoves(PIECE.BLACK).Count == 0 || getValidMoves(PIECE.WHITE).Count == 0)
             {
@@ -272,18 +272,18 @@ namespace OthelloMinimaxAI
 
         private void makeStartingBoard()
         {
-            for (int i = 0; i < TheBoard.GetLength(0); i++)
+            for (int i = 0; i < theBoard.GetLength(0); i++)
             {
-                for (int j = 0; j < TheBoard.GetLength(1); j++)
+                for (int j = 0; j < theBoard.GetLength(1); j++)
                 {
-                    TheBoard[i, j] = PIECE.EMPTY;
+                    theBoard[i, j] = PIECE.EMPTY;
                 }
             }
 
-            TheBoard[3, 3] = PIECE.WHITE;
-            TheBoard[3, 4] = PIECE.BLACK;
-            TheBoard[4, 3] = PIECE.BLACK;
-            TheBoard[4, 4] = PIECE.WHITE;
+            theBoard[3, 3] = PIECE.WHITE;
+            theBoard[3, 4] = PIECE.BLACK;
+            theBoard[4, 3] = PIECE.BLACK;
+            theBoard[4, 4] = PIECE.WHITE;
         }
         private char pieceToString(PIECE p)
         {
