@@ -6,19 +6,26 @@ namespace OthelloMinimaxAI
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Let's play Othello! \n Please Enter 'B' or 'W' for preferred piece");
+            Console.WriteLine("Let's play Othello! \n Please Enter 'B' or 'W' for preferred piece or 'A' to watch an AI BATTLE ");
 
             string player = Console.ReadLine();
 
+
             Board.PIECE PlayerPiece;
+            bool AIHUMAN = false;
 
             if (player.ToUpper().Equals("B"))
             {
                 PlayerPiece = Board.PIECE.BLACK;
             }
-            else
+            else if(player.ToUpper().Equals("W"))
             {
                 PlayerPiece = Board.PIECE.WHITE;
+            }
+            else
+            {
+                PlayerPiece = Board.PIECE.BLACK;
+                AIHUMAN = true;
             }
 
             Board currentBoard = new Board(PlayerPiece);
@@ -52,26 +59,32 @@ namespace OthelloMinimaxAI
 
                 if (currentBoard.CurrentPlayer == PlayerPiece)
                 {
-                    //Console.WriteLine("Enter row: ");
-                    //int row = int.Parse(Console.ReadLine().Trim());
-
-                    //Console.WriteLine("Enter col: ");
-                    //int col = int.Parse(Console.ReadLine().Trim());
-
-                    //if (!currentBoard.makeMove(row, col))
-                    //{
-                    //    Console.WriteLine("Invalid Move \n");
-                    //    continue;
-                    //}
-                    (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.BLACK, minimaxDepth, 0, int.MinValue, int.MaxValue);
-
-                    if (move == null)
+                    if (!AIHUMAN)
                     {
-                        currentBoard.IsTerminal = true;
-                        continue;
+                        Console.WriteLine("Enter row: ");
+                        int row = int.Parse(Console.ReadLine().Trim());
+
+                        Console.WriteLine("Enter col: ");
+                        int col = int.Parse(Console.ReadLine().Trim());
+
+                        if (!currentBoard.makeMove(row, col))
+                        {
+                            Console.WriteLine("Invalid Move \n");
+                            continue;
+                        }
                     }
-                    currentBoard.makeMove(move.row, move.col);
-                    Console.WriteLine("AI placed a piece at " + "row: " + move.row + "col: " + move.col + "\n");
+                    else
+                    {
+                        (int score, Move move) = currentBoard.minimax(currentBoard, Board.PIECE.BLACK, minimaxDepth, 0, int.MinValue, int.MaxValue);
+
+                        if (move == null)
+                        {
+                            currentBoard.IsTerminal = true;
+                            continue;
+                        }
+                        currentBoard.makeMove(move.row, move.col);
+                        Console.WriteLine("AI placed a piece at " + "row: " + move.row + "col: " + move.col + "\n");
+                    }
                 }
                 else if (currentBoard.CurrentPlayer != PlayerPiece)
                 {
